@@ -60,10 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.only(bottom: 10),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const Text("Data is provided by "),
+                  const Text("Data is provided by ",
+                      style: TextStyle(fontSize: 12)),
                   LinkWidget(
                       text: "GamerPower.com",
-                      url: Uri.parse("https://www.gamerpower.com"))
+                      url: Uri.parse("https://www.gamerpower.com"),
+                      fontSize: 12)
                 ]),
               ),
             ),

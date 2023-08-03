@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkWidget extends StatefulWidget {
-  const LinkWidget({
-    Key? key,
-    required this.text,
-    required this.url,
-  }) : super(key: key);
+  const LinkWidget(
+      {Key? key, required this.text, required this.url, this.fontSize})
+      : super(key: key);
 
   final String text;
   final Uri url;
+  final double? fontSize;
 
   @override
   State<LinkWidget> createState() => _LinkWidgetState();
@@ -26,7 +25,8 @@ class _LinkWidgetState extends State<LinkWidget> {
             style: TextStyle(
                 color: color,
                 decoration: TextDecoration.underline,
-                decorationThickness: 1.5)),
+                decorationThickness: 1.2,
+                fontSize: widget.fontSize)),
         onTap: () => launchUrl(widget.url));
   }
 }
