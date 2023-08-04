@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:game_giveaways/link_widget.dart';
 
@@ -91,20 +92,38 @@ class _GiveawayListState extends State<GiveawayList> {
     return FutureBuilder(
         future: giveaways,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-                itemBuilder: (context, index) =>
-                    GiveawayWidget(snapshot.data![index]),
-                itemCount: snapshot.data!.length);
-          } else if (snapshot.hasError) {
-            return Center(
-                child: Text(
-                    "Failed to get giveaways: ${(snapshot.error as Exception)}",
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.error)));
-          } else {
-            return const Center(child: CircularProgressIndicator());
+          Widget child;
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              child = const Center(child: CircularProgressIndicator());
+              break;
+            default:
+              if (snapshot.hasError) {
+                child = ListView(children: [
+                  Center(
+                      child: Text(
+                          "Failed to get giveaways: ${(snapshot.error as Exception)}",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error)))
+                ]);
+              } else {
+                child = ListView.builder(
+                    itemBuilder: (context, index) =>
+                        GiveawayWidget(snapshot.data![index]),
+                    itemCount: snapshot.data!.length,
+                    physics: const AlwaysScrollableScrollPhysics());
+              }
+              break;
           }
+
+          return RefreshIndicator(
+              child: child,
+              onRefresh: () async {
+                setState(() {
+                  giveaways = api.getGiveaways();
+                });
+              });
         });
   }
 }
@@ -121,6 +140,9 @@ class GiveawayWidget extends StatefulWidget {
 class _GiveawayWidgetState extends State<GiveawayWidget> {
   @override
   Widget build(BuildContext context) {
+    if (kDebugMode) {
+      print("Loading giveaway ${widget.giveaway.id}");
+    }
     return Card(
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Theme.of(context).colorScheme.primary),
