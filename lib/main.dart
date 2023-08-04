@@ -128,9 +128,69 @@ class _GiveawayWidgetState extends State<GiveawayWidget> {
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: Column(children: [
           Image.network(widget.giveaway.thumbnail, width: 540),
+          Text(widget.giveaway.title),
           Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Text(widget.giveaway.title)),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BorderedText(widget.giveaway.worth,
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 0, 255, 0), fontSize: 12),
+                      margin: const EdgeInsets.all(10)),
+                  if (widget.giveaway.endDate != null &&
+                      !widget.giveaway.remainingTime!.isNegative)
+                    BorderedText(
+                        "${formatDuration(widget.giveaway.remainingTime!)} left",
+                        style: const TextStyle(
+                            color: Color.fromARGB(255, 200, 200, 0),
+                            fontSize: 12),
+                        margin: const EdgeInsets.all(10)),
+                  BorderedText(widget.giveaway.type,
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 110, 110, 255),
+                          fontSize: 12),
+                      margin: const EdgeInsets.all(10)),
+                ],
+              ))
         ]));
+  }
+}
+
+String formatDuration(Duration duration) {
+  if (duration >= const Duration(days: 1)) {
+    return "${(duration.inHours / 24.0).ceil()} days";
+  }
+  if (duration >= const Duration(hours: 1)) {
+    return "${(duration.inMinutes / 60.0).ceil()} hours";
+  }
+  if (duration >= const Duration(minutes: 1)) {
+    return duration.toString();
+  }
+  return "${duration.inSeconds} seconds";
+}
+
+class BorderedText extends StatelessWidget {
+  const BorderedText(this.text, {Key? key, this.style, this.margin})
+      : super(key: key);
+
+  final String text;
+  final TextStyle? style;
+  final EdgeInsets? margin;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = style?.color ?? Theme.of(context).colorScheme.primary;
+
+    return Card(
+      color: color.withOpacity(0.1),
+      margin: margin,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: color),
+          borderRadius: const BorderRadius.all(Radius.circular(5))),
+      child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+          child: Text(text, style: style)),
+    );
   }
 }

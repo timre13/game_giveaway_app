@@ -158,6 +158,8 @@ class Giveaway {
       status; // TODO: Parse? (Possible values (probably): Active, Expired)
   final String gamerpowerUrl;
 
+  Duration? get remainingTime => endDate?.difference(DateTime.now());
+
   Giveaway({
     required this.id,
     required this.title,
