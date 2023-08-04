@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 const String apiUrl = "https://www.gamerpower.com/api";
@@ -128,6 +129,10 @@ class GiveawaySummary {
 
 Future<GiveawaySummary> getGiveawaySummary(
     {Platform? platform, GiveawayType? type}) async {
+  if (kDebugMode) {
+    print("Getting giveaway summary");
+  }
+
   final url = buildUrl(
       endpoint: "worth", arguments: {"platform": platform, "type": type});
 
@@ -203,6 +208,10 @@ enum SortBy {
 
 Future<List<Giveaway>> getGiveaways(
     {Platform? platform, GiveawayType? type, SortBy? sortBy}) async {
+  if (kDebugMode) {
+    print("Getting giveaway list");
+  }
+
   final url = buildUrl(
       endpoint: "giveaways",
       arguments: {"platform": platform, "type": type, "sort-by": sortBy});
