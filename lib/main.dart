@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_giveaways/list_widget.dart';
+import 'package:game_giveaways/link_widget.dart';
 
 import 'api/api.dart' as api;
 
