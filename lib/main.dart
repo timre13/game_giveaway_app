@@ -119,8 +119,16 @@ class _GiveawayListState extends State<GiveawayList> {
           return RefreshIndicator(
               child: child,
               onRefresh: () async {
+                // This way the pull down spinner will be shown while doing work
+                try {
+                  List<api.Giveaway> results = await api.getGiveaways();
+                  giveaways = Future.value(results);
+                } catch (e) {
+                  giveaways = Future.error(e);
+                }
+
                 setState(() {
-                  giveaways = api.getGiveaways();
+                  giveaways = giveaways;
                 });
               });
         });
