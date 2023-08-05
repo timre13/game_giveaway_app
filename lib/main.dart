@@ -58,8 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const GiveawayList(),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+              child: Container(
+                color: Theme.of(context).colorScheme.background,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   const Text("Data is provided by ",
