@@ -99,19 +99,24 @@ class _GiveawayListState extends State<GiveawayList> {
               break;
             default:
               if (snapshot.hasError) {
-                child = ListView(children: [
-                  Center(
-                      child: Text(
-                          "Failed to get giveaways: ${(snapshot.error as Exception)}",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.error)))
-                ]);
+                child = LayoutBuilder(builder: (context, constraints) {
+                  return ListView(children: [
+                    SizedBox(
+                        height: constraints.maxHeight,
+                        child: Center(
+                            child: Text(
+                                "Failed to get giveaways:\n${api.getExceptionMessage(snapshot.error as Exception)}",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.error))))
+                  ]);
+                });
               } else {
                 child = ListView.builder(
                     itemBuilder: (context, index) =>
                         GiveawayWidget(snapshot.data![index]),
-                    itemCount: snapshot.data!.length,
-                    physics: const AlwaysScrollableScrollPhysics());
+                    itemCount: snapshot.data!.length);
               }
               break;
           }

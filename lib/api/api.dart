@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -43,6 +44,19 @@ class ServerErrorException extends ApiException {
 
   @override
   String toString() => "ServerErrorException($message)";
+}
+
+String getExceptionMessage(Exception e) {
+  if (e is ApiException) {
+    return e.message;
+  }
+  if (e is SocketException) {
+    return e.message + (e.osError != null ? " (${e.osError!.message})" : "");
+  }
+  if (e is http.ClientException) {
+    return e.message;
+  }
+  return e.toString();
 }
 
 http.Response checkStatusCode(http.Response response) {
