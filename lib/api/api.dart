@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:http/http.dart' as http;
 
 const String apiUrl = "https://www.gamerpower.com/api";
@@ -193,14 +194,16 @@ class Giveaway {
   });
 
   factory Giveaway.fromJson(Map<String, dynamic> json) {
+    var unescape = HtmlUnescape();
+
     return Giveaway(
       id: json["id"],
-      title: json["title"],
+      title: unescape.convert(json["title"]),
       worth: json["worth"],
       thumbnail: json["thumbnail"],
       image: json["image"],
-      description: json["description"],
-      instructions: json["instructions"],
+      description: unescape.convert(json["description"]),
+      instructions: unescape.convert(json["instructions"]),
       openGiveawayUrl: json["open_giveaway_url"],
       publishedDate: DateTime.parse(json["published_date"]),
       type: json["type"],
