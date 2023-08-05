@@ -157,34 +157,34 @@ class _GiveawayWidgetState extends State<GiveawayWidget> {
             side: BorderSide(color: Theme.of(context).colorScheme.primary),
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        child: Column(children: [
-          Image.network(widget.giveaway.thumbnail, width: 540),
-          Text(widget.giveaway.title),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
+        child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(children: [
+              Image.network(widget.giveaway.thumbnail),
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child:
+                      Text(widget.giveaway.title, textAlign: TextAlign.center)),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   BorderedText(widget.giveaway.worth,
                       style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 255, 0), fontSize: 12),
-                      margin: const EdgeInsets.all(10)),
+                          color: Color.fromARGB(255, 0, 255, 0), fontSize: 12)),
                   if (widget.giveaway.endDate != null &&
                       !widget.giveaway.remainingTime!.isNegative)
                     BorderedText(
                         "${formatDuration(widget.giveaway.remainingTime!)} left",
                         style: const TextStyle(
                             color: Color.fromARGB(255, 200, 200, 0),
-                            fontSize: 12),
-                        margin: const EdgeInsets.all(10)),
+                            fontSize: 12)),
                   BorderedText(widget.giveaway.type,
                       style: const TextStyle(
                           color: Color.fromARGB(255, 110, 110, 255),
-                          fontSize: 12),
-                      margin: const EdgeInsets.all(10)),
+                          fontSize: 12)),
                 ],
-              ))
-        ]));
+              ),
+            ])));
   }
 }
 
