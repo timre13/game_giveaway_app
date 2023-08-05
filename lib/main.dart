@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:game_giveaways/link_widget.dart';
 
@@ -140,9 +139,6 @@ class GiveawayWidget extends StatefulWidget {
 class _GiveawayWidgetState extends State<GiveawayWidget> {
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print("Loading giveaway ${widget.giveaway.id}");
-    }
     return Card(
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Theme.of(context).colorScheme.primary),
