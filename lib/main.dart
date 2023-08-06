@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:game_giveaways/link_widget.dart';
 
@@ -157,35 +158,102 @@ class _GiveawayWidgetState extends State<GiveawayWidget> {
             side: BorderSide(color: Theme.of(context).colorScheme.primary),
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(children: [
-              Image.network(widget.giveaway.thumbnail),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child:
-                      Text(widget.giveaway.title, textAlign: TextAlign.center)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  BorderedText(widget.giveaway.worth,
-                      style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 255, 0), fontSize: 12)),
-                  if (widget.giveaway.endDate != null &&
-                      !widget.giveaway.remainingTime!.isNegative)
-                    BorderedText(
-                        "${formatDuration(widget.giveaway.remainingTime!)} left",
-                        style: const TextStyle(
-                            color: Color.fromARGB(255, 200, 200, 0),
-                            fontSize: 12)),
-                  BorderedText(widget.giveaway.type,
-                      style: const TextStyle(
-                          color: Color.fromARGB(255, 110, 110, 255),
-                          fontSize: 12)),
-                ],
-              ),
-            ])));
+        child: InkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          onTap: () => openGiveaway(context, widget.giveaway),
+          child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(children: [
+                Image.network(widget.giveaway.thumbnail),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(widget.giveaway.title,
+                        textAlign: TextAlign.center)),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BorderedText(widget.giveaway.worth,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 0, 255, 0),
+                              fontSize: 12)),
+                      if (widget.giveaway.endDate != null &&
+                          !widget.giveaway.remainingTime!.isNegative)
+                        BorderedText(
+                            "${formatDuration(widget.giveaway.remainingTime!)} left",
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 200, 200, 0),
+                                fontSize: 12)),
+                      BorderedText(widget.giveaway.type,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 110, 110, 255),
+                              fontSize: 12)),
+                    ])
+              ])),
+        ));
   }
+}
+
+void openGiveaway(context, api.Giveaway giveaway) {
+  if (kDebugMode) {
+    print("Opening giveaway: ${giveaway.id}");
+  }
+
+  showGeneralDialog(
+    context: context,
+    transitionDuration: const Duration(milliseconds: 150),
+    transitionBuilder: (context, animation, secondaryAnimation, child) =>
+        Transform.translate(
+            offset: Offset(
+                0,
+                (1 - animation.value) *
+                        (MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).viewPadding.top) +
+                    MediaQuery.of(context).viewPadding.top),
+            child: child),
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return Material(
+          child: Column(children: [
+        Image.network(giveaway.image),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(giveaway.title,
+                  style: Theme.of(context).textTheme.titleMedium),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                BorderedText("Worth: ${giveaway.worth}",
+                    style:
+                        const TextStyle(color: Color.fromARGB(255, 0, 255, 0))),
+                if (giveaway.endDate != null &&
+                    !giveaway.remainingTime!.isNegative)
+                  BorderedText(
+                      "${formatDuration(giveaway.remainingTime!)} left",
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 200, 200, 0))),
+                BorderedText("Type: ${giveaway.type}",
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 110, 110, 255))),
+              ]),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Wrap(
+                    children: giveaway.platforms
+                        .split(", ")
+                        .map((e) => BorderedText(e,
+                            style: TextStyle(color: Colors.purple.shade400)))
+                        .toList(growable: false),
+                  )),
+              BorderedText("Claimed by: ${giveaway.users}+",
+                  style: const TextStyle(color: Colors.blue)),
+              const Divider(),
+              Text(giveaway.description, textAlign: TextAlign.justify),
+              const Divider(),
+              const Text("Instructions:"),
+              Text(giveaway.instructions, textAlign: TextAlign.justify),
+            ]))
+      ]));
+    },
+  );
 }
 
 String formatDuration(Duration duration) {
