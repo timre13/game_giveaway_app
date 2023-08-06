@@ -234,15 +234,13 @@ void openGiveaway(context, api.Giveaway giveaway) {
                     style: const TextStyle(
                         color: Color.fromARGB(255, 110, 110, 255))),
               ]),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Wrap(
-                    children: giveaway.platforms
-                        .split(", ")
-                        .map((e) => BorderedText(e,
-                            style: TextStyle(color: Colors.purple.shade400)))
-                        .toList(growable: false),
-                  )),
+              Wrap(
+                children: giveaway.platforms
+                    .split(", ")
+                    .map((e) => BorderedText(e,
+                        style: TextStyle(color: Colors.purple.shade400)))
+                    .toList(growable: false),
+              ),
               BorderedText("Claimed by: ${giveaway.users}+",
                   style: const TextStyle(color: Colors.blue)),
               const Divider(),
