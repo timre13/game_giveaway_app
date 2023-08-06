@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:game_giveaways/link_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'api/api.dart' as api;
 
@@ -248,7 +249,13 @@ void openGiveaway(context, api.Giveaway giveaway) {
               const Divider(),
               const Text("Instructions:"),
               Text(giveaway.instructions, textAlign: TextAlign.justify),
-            ]))
+            ])),
+        Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: FilledButton(
+                onPressed: () => launchUrl(Uri.parse(giveaway.openGiveawayUrl)),
+                child: Text("Claim",
+                    style: Theme.of(context).textTheme.bodyLarge)))
       ]));
     },
   );
