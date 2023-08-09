@@ -214,7 +214,7 @@ void openGiveaway(context, api.Giveaway giveaway) {
     pageBuilder: (context, animation, secondaryAnimation) {
       return Material(
           child: Column(children: [
-        Image.network(giveaway.image),
+        Image.network(giveaway.image, height: 215),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child:
@@ -245,10 +245,33 @@ void openGiveaway(context, api.Giveaway giveaway) {
               BorderedText("Claimed by: ${giveaway.users}+",
                   style: const TextStyle(color: Colors.blue)),
               const Divider(),
-              Text(giveaway.description, textAlign: TextAlign.justify),
-              const Divider(),
-              const Text("Instructions:"),
-              Text(giveaway.instructions, textAlign: TextAlign.justify),
+              SizedBox(
+                  height: 350,
+                  child: Stack(alignment: Alignment.topCenter, children: [
+                    ListView(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        children: [
+                          Text(giveaway.description,
+                              textAlign: TextAlign.justify),
+                          const Divider(),
+                          const Text("Instructions:"),
+                          Text("${giveaway.instructions}\n",
+                              textAlign: TextAlign.justify),
+                        ]),
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                            height: 30,
+                            decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                  Color(0x00212121),
+                                  Color(0xff212121)
+                                ])))),
+                  ]))
             ])),
         Padding(
             padding: const EdgeInsets.only(top: 20),
