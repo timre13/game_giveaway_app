@@ -273,10 +273,10 @@ void openGiveaway(context, api.Giveaway giveaway) {
             child: child),
     pageBuilder: (context, animation, secondaryAnimation) {
       return Material(
-          child: Column(children: [
+          child: Stack(children: [
         Image.network(giveaway.image, height: 215),
         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.only(right: 10, left: 10, top: 215),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(giveaway.title,
@@ -333,12 +333,15 @@ void openGiveaway(context, api.Giveaway giveaway) {
                                 ])))),
                   ]))
             ])),
-        Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: FilledButton(
-                onPressed: () => launchUrl(Uri.parse(giveaway.openGiveawayUrl)),
-                child: Text("Claim",
-                    style: Theme.of(context).textTheme.bodyLarge)))
+        Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+                padding: const EdgeInsets.only(bottom: 35),
+                child: FilledButton(
+                    onPressed: () =>
+                        launchUrl(Uri.parse(giveaway.openGiveawayUrl)),
+                    child: Text("Claim",
+                        style: Theme.of(context).textTheme.bodyLarge))))
       ]));
     },
   );
