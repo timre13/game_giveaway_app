@@ -27,7 +27,6 @@ class App extends StatelessWidget {
 
   final ThemeData theme;
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,6 +45,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  api.Platform? _platformFilter;
+  api.GiveawayType? _typeFilter;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +59,60 @@ class _MyHomePageState extends State<MyHomePage> {
       body: DefaultTextStyle(
           style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
           child: Stack(children: [
-            const GiveawayList(),
+            Row(
+              children: [
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Theme.of(context).colorScheme.onBackground),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: DropdownButton(
+                        underline: Container(),
+                        value: _platformFilter,
+                        items: [
+                          const DropdownMenuItem(
+                              value: null, child: Text("All Platforms")),
+                          ...api.Platform.values
+                              .map((e) => DropdownMenuItem(
+                                  value: e, child: Text(e.getDisplayName())))
+                              .toList(growable: false)
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _platformFilter = value;
+                          });
+                        })),
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Theme.of(context).colorScheme.onBackground),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: DropdownButton(
+                        underline: Container(),
+                        value: _typeFilter,
+                        items: [
+                          const DropdownMenuItem(
+                              value: null, child: Text("All Types")),
+                          ...api.GiveawayType.values
+                              .map((e) => DropdownMenuItem(
+                                  value: e, child: Text(e.getDisplayName())))
+                              .toList(growable: false)
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _typeFilter = value;
+                          });
+                        })),
+              ],
+            ),
+            Padding(
+                padding: const EdgeInsets.only(top: 60),
+                child: GiveawayList(
+                    platformFilter: _platformFilter, typeFilter: _typeFilter)),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -79,17 +134,22 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class GiveawayList extends StatefulWidget {
-  const GiveawayList({Key? key}) : super(key: key);
+  const GiveawayList(
+      {Key? key, required this.platformFilter, required this.typeFilter})
+      : super(key: key);
+
+  final api.Platform? platformFilter;
+  final api.GiveawayType? typeFilter;
 
   @override
   State<GiveawayList> createState() => _GiveawayListState();
 }
 
 class _GiveawayListState extends State<GiveawayList> {
-  Future<List<api.Giveaway>> giveaways = api.getGiveaways();
-
   @override
   Widget build(BuildContext context) {
+    Future<List<api.Giveaway>> giveaways = api.getGiveaways(
+        platform: widget.platformFilter, type: widget.typeFilter);
     return FutureBuilder(
         future: giveaways,
         builder: (context, snapshot) {

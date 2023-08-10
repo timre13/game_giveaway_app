@@ -81,37 +81,61 @@ http.Response checkStatusCode(http.Response response) {
 }
 
 enum Platform {
-  pc,
-  steam,
+  android,
+  battlenet,
+  drmFree,
   epicGamesStore,
-  ubisoft,
   gog,
+  ios,
   itchio,
+  origin,
+  pc,
   ps4,
   ps5,
-  xboxOne,
-  xboxSeriesXS,
+  steam,
   switch_,
-  android,
-  ios,
+  ubisoft,
   vr,
-  battlenet,
-  origin,
-  drmFree,
-  xbox360;
+  xbox360,
+  xboxOne,
+  xboxSeriesXS;
 
   @override
   String toString() {
     // Epic Map trickery
     return {
+          drmFree: "drm-free",
           epicGamesStore: "epic-games-store",
+          switch_: "switch",
+          xbox360: "xbox-360",
           xboxOne: "xbox-one",
           xboxSeriesXS: "xbox-series-xs",
-          switch_: "switch",
-          drmFree: "drm-free",
-          xbox360: "xbox-360",
         }[this] ??
         name;
+  }
+
+  String getDisplayName() {
+    return {
+          android: "Android",
+          battlenet: "Battle.net",
+          drmFree: "DRM-Free",
+          epicGamesStore: "Epic Games Store",
+          gog: "GOG",
+          ios: "iOS",
+          itchio: "itch.io",
+          origin: "Origin",
+          pc: "PC",
+          ps4: "PS4",
+          ps5: "PS5",
+          steam: "Steam",
+          switch_: "Switch",
+          ubisoft: "Ubisoft",
+          vr: "VR",
+          xbox360: "Xbox 360",
+          xboxOne: "Xbox One",
+          xboxSeriesXS: "Xbox Series X/S",
+        }[this] ??
+        "";
   }
 }
 
@@ -122,6 +146,10 @@ enum GiveawayType {
 
   @override
   String toString() => name;
+
+  String getDisplayName() {
+    return {game: "Game", loot: "Loot", beta: "Beta"}[this] ?? "";
+  }
 }
 
 class GiveawaySummary {
