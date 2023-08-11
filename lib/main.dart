@@ -272,76 +272,78 @@ void openGiveaway(context, api.Giveaway giveaway) {
                     MediaQuery.of(context).viewPadding.top),
             child: child),
     pageBuilder: (context, animation, secondaryAnimation) {
-      return Material(
-          child: Stack(children: [
-        Image.network(giveaway.image, height: 215),
-        Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10, top: 215),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(giveaway.title,
-                  style: Theme.of(context).textTheme.titleMedium),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                BorderedText("Worth: ${giveaway.worth}",
-                    style:
-                        const TextStyle(color: Color.fromARGB(255, 0, 255, 0))),
-                if (giveaway.endDate != null &&
-                    !giveaway.remainingTime!.isNegative)
-                  BorderedText(
-                      "${formatDuration(giveaway.remainingTime!)} left",
-                      style: const TextStyle(
-                          color: Color.fromARGB(255, 200, 200, 0))),
-                BorderedText("Type: ${giveaway.type}",
-                    style: const TextStyle(
-                        color: Color.fromARGB(255, 110, 110, 255))),
-              ]),
-              Wrap(
-                children: giveaway.platforms
-                    .split(", ")
-                    .map((e) => BorderedText(e,
-                        style: TextStyle(color: Colors.purple.shade400)))
-                    .toList(growable: false),
-              ),
-              BorderedText("Claimed by: ${giveaway.users}+",
-                  style: const TextStyle(color: Colors.blue)),
+      var topImage = Align(
+          alignment: Alignment.topCenter,
+          child: Image.network(giveaway.image,
+              height: 220, fit: BoxFit.fitHeight));
+      var infoRow = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          BorderedText("Worth: ${giveaway.worth}",
+              style: const TextStyle(color: Color.fromARGB(255, 0, 255, 0))),
+          if (giveaway.endDate != null && !giveaway.remainingTime!.isNegative)
+            BorderedText("${formatDuration(giveaway.remainingTime!)} left",
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 200, 200, 0))),
+          BorderedText("Type: ${giveaway.type}",
+              style:
+                  const TextStyle(color: Color.fromARGB(255, 110, 110, 255))),
+        ],
+      );
+      var platformsRow = Wrap(
+        children: giveaway.platforms
+            .split(", ")
+            .map((e) => BorderedText(e,
+                style: TextStyle(color: Colors.purple.shade400)))
+            .toList(growable: false),
+      );
+      var textBlock = ConstrainedBox(
+          constraints: const BoxConstraints.expand(),
+          child: Stack(alignment: Alignment.topCenter, children: [
+            ListView(padding: EdgeInsets.zero, shrinkWrap: true, children: [
+              Text(giveaway.description, textAlign: TextAlign.justify),
               const Divider(),
-              SizedBox(
-                  height: 350,
-                  child: Stack(alignment: Alignment.topCenter, children: [
-                    ListView(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        children: [
-                          Text(giveaway.description,
-                              textAlign: TextAlign.justify),
-                          const Divider(),
-                          const Text("Instructions:"),
-                          Text("${giveaway.instructions}\n",
-                              textAlign: TextAlign.justify),
-                        ]),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                            height: 30,
-                            decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                  Color(0x00212121),
-                                  Color(0xff212121)
-                                ])))),
-                  ]))
-            ])),
-        Align(
-            alignment: Alignment.bottomCenter,
+              const Text("Instructions:"),
+              Text("${giveaway.instructions}\n", textAlign: TextAlign.justify),
+            ]),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                    height: 30,
+                    decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0x00212121), Color(0xff212121)])))),
+          ]));
+      var bottomButton = Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+              padding: const EdgeInsets.only(bottom: 35),
+              child: FilledButton(
+                  onPressed: () =>
+                      launchUrl(Uri.parse(giveaway.openGiveawayUrl)),
+                  child: Text("Claim",
+                      style: Theme.of(context).textTheme.bodyLarge))));
+
+      return Material(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        topImage,
+        ...[
+          Text(giveaway.title, style: Theme.of(context).textTheme.titleMedium),
+          infoRow,
+          platformsRow,
+          BorderedText("Claimed by: ${giveaway.users}+",
+              style: const TextStyle(color: Colors.blue)),
+          const Divider()
+        ].map((e) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10), child: e)),
+        Expanded(
             child: Padding(
-                padding: const EdgeInsets.only(bottom: 35),
-                child: FilledButton(
-                    onPressed: () =>
-                        launchUrl(Uri.parse(giveaway.openGiveawayUrl)),
-                    child: Text("Claim",
-                        style: Theme.of(context).textTheme.bodyLarge))))
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: textBlock)),
+        bottomButton
       ]));
     },
   );
