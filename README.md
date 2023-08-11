@@ -1,16 +1,15 @@
 # game_giveaways
 
-Video game giveaways.
+An app that displays a list of video game giveaways.
 
-## Getting Started
+![](docs/recording.gif)
 
-This project is a starting point for a Flutter application.
+## Building
 
-A few resources to get you started if this is your first Flutter project:
+### With Android Studio
+1. Open the project in Android Studio
+2. Click on the `Build -> Flutter -> Build APK` menu item
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Without Android Studio
+1. Run `flutter build apk` in the root of the directory
+2. The resulting APK will be at `build/app/outputs/flutter-apk/app-release.apk`
